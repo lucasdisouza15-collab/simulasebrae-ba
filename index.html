@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#009ee3">
+<title>Simulado Oficial SEBRAE/BA — Edital 2026</title>
+<style>
+:root{--b:#009ee3;--d:#073b76;--i:#102f4c;--m:#5a738e;--success:#059669;--danger:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;background:#f0f7fc;color:var(--i);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.app{max-width:760px;margin:auto;min-height:100vh}
+header{padding:24px 20px 28px;color:#fff;background:linear-gradient(135deg,#005b9f,#00a3e0);border-radius:0 0 26px 26px;box-shadow:0 4px 18px rgba(0,91,159,.25)}
+.brand{font-weight:900;font-size:24px;letter-spacing:-.5px}
+header h1{font-size:26px;margin:12px 0 6px}
+header p{margin:0;opacity:.92;font-size:14px}
+main{padding:16px}
+.card{background:#fff;border:1px solid #dcecf6;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 6px 18px rgba(8,80,133,.06)}
+.small{font-size:13px;color:var(--m);line-height:1.45}
+select,button,textarea{font:inherit;border-radius:12px;padding:12px;width:100%}
+select,textarea{border:1px solid #cce3f2;background:#f8fcff;color:var(--i);margin:8px 0}
+button{border:0;background:linear-gradient(100deg,#008bd4,#02b3e4);color:#fff;font-weight:800;margin-top:8px;cursor:pointer;transition:transform .1s,opacity .2s}
+button:active{transform:scale(.98)}
+button:hover{opacity:.95}
+.hidden{display:none}
+.badge{display:inline-block;background:#e1f3fe;color:#036ba8;padding:6px 11px;border-radius:18px;font-size:11px;font-weight:800;letter-spacing:.3px}
+.progress{height:8px;background:#e1eef7;border-radius:8px;margin:14px 0;overflow:hidden}
+.bar{height:100%;background:linear-gradient(90deg,#008bd4,#22cbe7);transition:width .25s ease}
+.question{font-size:16px;font-weight:600;line-height:1.45;margin:16px 0}
+.opt{background:#f8fcfe;color:var(--i);border:1px solid #d6e8f4;text-align:left;font-weight:500;margin:6px 0;padding:12px 14px;border-radius:12px}
+.score{font-size:44px;color:#007bc0;font-weight:900;text-align:center;margin:8px 0}
+.review{padding:14px 0;border-bottom:1px solid #e7f0f6}
+.fun{color:#4b6584;font-style:italic;text-align:center;margin:6px 0 16px}
+.back{background:#e8f4fa;color:#0277bd}
+.tag-correct{color:var(--success);font-weight:bold}
+.tag-wrong{color:var(--danger);font-weight:bold}
+h2{margin:0 0 6px;font-size:19px}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand">SEBRAE/BA <span style="color:#b5f0ff">•</span> Edital 2026</div>
+<h1>Simulador de Conhecimentos</h1>
+<p>Fundação CEFETBAHIA • Analista Técnico I e II • Gabarito Comentado</p>
+</header>
+<main>
+<section id="home" class="card">
+<span class="badge">PROVA OBJETIVA 2026</span>
+<h2>Selecione sua Especialidade</h2>
+<p class="small">Questões focadas na LC 123/2006, Regulamento de Compras do Sistema S, Código de Ética e ferramentas de gestão.</p>
+<select id="role">
+<option value="negocios">Analista Técnico I — Negócios e MPEs</option>
+<option value="projetos">Analista Técnico I — Programas, Projetos e Processos</option>
+<option value="aquisicoes">Analista Técnico I — Aquisições e Contratos</option>
+<option value="pessoas">Analista Técnico I — Gestão de Pessoas</option>
+<option value="politicas">Analista Técnico II — Políticas Públicas e Desenvolvimento Territorial</option>
+<option value="dados">Analista Técnico II — Inteligência de Dados e Inovação</option>
+</select>
+<button onclick="start()">Iniciar Questões →</button>
+</section>
+
+<section id="quiz" class="card hidden"></section>
+<section id="result" class="card hidden"></section>
+
+<section class="card">
+<span class="badge">PROVA DISCURSIVA 2026</span>
+<h2>Laboratório de Redação / Estudo de Caso</h2>
+<p class="small">Treine propostas oficiais do edital SEBRAE/BA com avaliação automatizada de critérios técnicos.</p>
+<button onclick="newTopic()">🎲 Sortear Proposta do Edital</button>
+<div id="topicBox" style="margin-top:10px">
+  <p id="topic" class="question" style="color:#006dae">Clique no botão para carregar a proposta da banca.</p>
+</div>
+<textarea id="essay" rows="9" placeholder="Elabore seu texto dissertativo com introdução, desenvolvimento fundamentado nas MPEs e proposta conclusiva de intervenção..."></textarea>
+<button onclick="gradeEssay()">Analisar Redação</button>
+<div id="essayResult" class="small"></div>
+</section>
+</main>
+</div>
+
+<script>
+const db = {
+  "negocios": [
+    ["Conforme a Lei Complementar nº 123/2006 (Estatuto Nacional da ME e EPP), constitui tratamento favorecido e simplificado legalmente assegurado:",
+      ["imunidade de vistorias sanitárias e ambientais mesmo em atividades classificadas como de alto risco.",
+       "preferência em critérios de desempate ficto em certames de contratação pública.",
+       "isenção tributária vitalícia para sócios que possuam participação em mais de cinco empresas coligadas.",
+       "dispensa irrestrita de cadastramento de empregados no sistema de seguridade social."],
+      1,
+      "Gabarito: B. A LC 123/2006 assegura o direito de desempate ficto (art. 44 e 45). Se o examinador quisesse dar isenção irrestrita pra quem tem 5 empresas, o Ministério da Fazenda pediria concordata!"],
+    ["Na consultoria do SEBRAE para modelagem inicial de modelos de negócios escaláveis, o quadrante do Business Model Canvas que conecta a proposição de valor aos segmentos de clientes por meio de pontos de contato é denominado:",
+      ["Fontes de Receita.",
+       "Estrutura de Custos.",
+       "Canais (Channels).",
+       "Parcerias Principais."],
+      2,
+      "Gabarito: C. Canais são as vias pelas quais o valor prometido chega fisicamente ou digitalmente ao cliente. Não confunda com a receita que entra depois no caixa."],
