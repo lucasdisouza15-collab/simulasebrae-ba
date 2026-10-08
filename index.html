@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2563eb">
+<title>Aplica+</title>
+<style>
+:root{
+  --primary-start:#2563eb;
+  --primary-end:#06b6d4;
+  --bg:#f8fafc;
+  --card-bg:#ffffff;
+  --text-main:#0f172a;
+  --text-muted:#64748b;
+  --border:#e2e8f0;
+  --correct:#10b981;
+  --wrong:#ef4444;
+}
+*{-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+body{
+  margin:0;padding:0;
+  background:var(--bg);color:var(--text-main);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  line-height:1.5;
+}
+.app-container{max-width:560px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{
+  padding:32px 20px 24px;
+  background:linear-gradient(135deg,var(--primary-start),var(--primary-end));
+  border-radius:0 0 28px 28px;color:#fff;
+  box-shadow:0 10px 25px rgba(37,99,235,0.18);
+}
+.brand{font-size:26px;font-weight:900;display:flex;align-items:center;gap:4px}
+.brand span{background:rgba(255,255,255,0.25);padding:2px 8px;border-radius:10px;font-size:18px}
+header h1{font-size:22px;margin:14px 0 4px;font-weight:800}
+header p{margin:0;font-size:13px;opacity:0.95}
+main{padding:16px 16px 40px;display:flex;flex-direction:column;gap:16px}
+.card{
+  background:var(--card-bg);border:1px solid var(--border);
+  border-radius:22px;padding:20px;
+  box-shadow:0 6px 18px rgba(15,23,42,0.04);
+}
+.tag{
+  display:inline-block;background:#eff6ff;color:var(--primary-start);
+  font-size:11px;font-weight:800;text-transform:uppercase;
+  padding:4px 10px;border-radius:12px;margin-bottom:12px;
+}
+h2{font-size:18px;margin:0 0 6px;font-weight:800}
+.subtitle{font-size:13px;color:var(--text-muted);margin:0 0 16px}
+select,textarea,button{font:inherit;width:100%;border-radius:14px;outline:none}
+select,textarea{
+  background:#f8fafc;border:1.5px solid var(--border);
+  color:var(--text-main);padding:14px;font-size:14px;
+}
+select:focus,textarea:focus{border-color:var(--primary-start);background:#fff}
+button{
+  cursor:pointer;border:0;padding:15px;font-weight:700;font-size:15px;
+  background:linear-gradient(135deg,var(--primary-start),var(--primary-end));
+  color:#fff;box-shadow:0 6px 18px rgba(37,99,235,0.22);
+  margin-top:10px;transition:opacity .2s;
+}
+button:active{transform:scale(0.98)}
+button:disabled{opacity:0.6;cursor:not-allowed}
+.hidden{display:none !important}
+.progress-bar-wrapper{background:#e2e8f0;height:6px;border-radius:10px;margin:14px 0 16px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary-start),var(--primary-end));transition:width .3s}
+.question-title{font-size:15px;font-weight:700;margin-bottom:16px;line-height:1.5}
+.option-btn{
+  background:#f8fafc;border:1.5px solid var(--border);color:var(--text-main);
+  text-align:left;font-weight:500;font-size:13.5px;padding:13px 15px;
+  margin-bottom:10px;border-radius:14px;box-shadow:none;
+}
+.option-btn:active{background:#e2e8f0}
+.score-circle{text-align:center;font-size:46px;font-weight:900;color:var(--primary-start);margin:10px 0 4px}
+.review-item{padding:14px 0;border-bottom:1px solid var(--border)}
+.badge-result{display:inline-block;font-weight:800;font-size:12px;border-radius:8px;padding:3px 8px}
+.badge-correct{background:#d1fae5;color:var(--correct)}
+.badge-wrong{background:#fee2e2;color:var(--wrong)}
+.comment-box{
+  background:#f8fafc;border-left:3px solid var(--primary-start);
+  padding:10px 12px;border-radius:10px;font-size:13px;margin-top:8px;color:var(--text-muted);
+}
+.secondary-btn{background:#e2e8f0;color:var(--text-main);box-shadow:none;margin-top:8px}
+.ai-box{
+  background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:16px;
+  padding:16px;margin-top:14px;font-size:13.5px;line-height:1.6;color:#14532d;
+}
+.loading-dots:after{
+  content:' .';animation:dots 1s steps(5,end) infinite;
+}
+@keyframes dots{0%,20%{content:' .'}40%{content:' ..'}60%{content:' ...'}80%,100%{content:''}}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <header>
+    <div class="brand">Aplica<span>+</span></div>
+    <h1>Simulado Oficial SEBRAE 2026</h1>
+    <p>Padrão Cebraspe (A-E) e Correção de Redação com IA.</p>
+  </header>
+
+  <main>
+    <section id="screenHome" class="card">
+      <span class="tag">Simulado Técnico</span>
+      <h2>Selecione o Cargo de Estudo</h2>
+      <p class="subtitle">Caderno de questões com itens no perfil da banca Cebraspe:</p>
+      
+      <select id="selectRole">
+        <option value="negocios">Analista Técnico I — Negócios</option>
+        <option value="projetos">Analista Técnico I — Programas, Projetos e Processos</option>
+        <option value="pessoas">Analista Técnico I — Gestão de Pessoas</option>
+        <option value="aquisicoes">Analista Técnico I — Aquisições e Contratos</option>
+        <option value="financeiro">Analista Técnico I — Financeiro e Controladoria</option>
+        <option value="sistemas">Analista Técnico II — Sistemas de Informação</option>
+        <option value="infra">Analista Técnico II — Infraestrutura e Segurança</option>
+        <option value="dados">Analista Técnico II — Inteligência de Dados</option>
+        <option value="marketing">Analista Técnico II — Marketing e Mídias</option>
+        <option value="comunicacao">Analista Técnico II — Comunicação Corporativa</option>
+        <option value="planejamento">Analista Técnico II — Planejamento e Estratégia</option>
+        <option value="politicas">Analista Técnico II — Políticas Públicas e Desenvolvimento Territorial</option>
+      </select>
+
+      <button id="btnStart" type="button">Iniciar Caderno de Questões →</button>
+    </section>
+
+    <section id="screenQuiz" class="card hidden"></section>
+    <section id="screenResult" class="card hidden"></section>
+
+    <section class="card">
+      <span class="tag">Discursiva com Avaliação IA</span>
+      <h2>Oficina de Redação — SEBRAE</h2>
+      <p class="subtitle">Gere propostas dissertativas reais e receba a correção analítica por IA.</p>
+      
+      <button id="btnTopic" type="button" class="secondary-btn">🎲 Sortear Tema do Edital</button>
+      
+      <div style="margin:14px 0 10px">
+        <p id="topicDisplay" style="font-size:14.5px;font-weight:700;color:var(--primary-start);margin:0">
+          Clique no botão acima para carregar o tema da banca.
+        </p>
+      </div>
+
+      <textarea id="essayInput" rows="8" placeholder="Escreva sua dissertação aqui (introdução, desenvolvimento e proposta de intervenção)..."></textarea>
+      
+      <button id="btnGrade" type="button">Corrigir com Banca Inteligente (IA)</button>
+      <div id="essayFeedback"></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const sebraeBank = {
+  "negocios": [
+    ["(SEBRAE/Cebraspe) De acordo com a Lei Complementar nº 123/2006 (Estatuto Nacional da ME e EPP), nas licitações públicas é assegurado tratamento favorecido e diferenciado aos pequenos negócios. A respeito do critério de empate ficto, assinale a opção correta:",
+      ["Configura-se empate ficto quando as propostas apresentadas por microempresas forem até 20% superiores à proposta mais bem classificada.",
+       "O empate ficto aplica-se exclusivamente a compras de bens de consumo imediato, sendo vedado em serviços de engenharia.",
+       "Nas licitações em geral, entende-se por empate ficto as situações em que as propostas de ME/EPP sejam até 10% superiores à proposta mais bem classificada, e de até 5% na modalidade pregão.",
+       "A microempresa em situação de empate ficto terá o direito de cobrir a oferta mais bem classificada no prazo improrrogável de 24 horas contadas da publicação em diário oficial.",
+       "O benefício do empate ficto independe de requerimento prévio e dispensa a comprovação de regularidade fiscal e trabalhista."],
+      2,
+      "Gabarito: C. Art. 44 da LC 123/2006: nas licitações gerais o intervalo de empate ficto é de até 10%; no pregão é de até 5%. Comprovação de regularidade fiscal e trabalhista continua sendo obrigatória!"],
+    ["(SEBRAE/Cebraspe) Em uma ação consultiva para um Microempreendedor Individual (MEI) do setor de serviços, o analista constata que o negócio possui forte demanda, mas o titular desconstrói o capital de giro misturando despesas pessoais com as da empresa. A primeira orientação técnica estruturante para sanar essa anomalia é:",
+      ["Solicitar imediatamente empréstimo de antecipação de recebíveis junto a fintechs com taxa flutuante.",
+       "Estabelecer a separação estrita entre pessoa física e jurídica pelo princípio contábil da Entidade, instituindo um pró-labore fixo e contas bancárias segregadas.",
+       "Transformar o MEI imediatamente em Sociedade Anônima de capital fechado.",
+       "Reduzir os preços praticados para liquidar o estoque e gerar caixa a qualquer custo.",
+       "Adotar o regime contábil de competência estrita com apuração de depreciação acelerada dos móveis residenciais."],
+      1,
+      "Gabarito: B. O princípio contábil da Entidade é basilar. Misturar despesas domésticas com a conta do negócio é a maior causa de falência nos dois primeiros anos."],
+    ["(SEBRAE/Cebraspe) O Marco Legal das Startups (Lei Complementar nº 182/2021) instituiu instrumentos de estímulo ao empreendedorismo inovador no Brasil. Com base nessa legislação, é correto afirmar que:",
+      ["São consideradas startups exclusivamente as empresas com faturamento anual de até R$ 4,8 milhões e até 2 anos de inscrição no CNPJ.",
+       "O investidor-anjo que realiza aporte em startup passa a responder solidariamente por todas as obrigações trabalhistas e tributárias da sociedade investida.",
+       "O aporte de capital realizado por investidor-anjo não integra o capital social da empresa, não outorga direito a voto e não gera responsabilidade por dívidas da empresa.",
+       "As contratações públicas de soluções inovadoras sob o Marco Legal exigem obrigatoriamente a apresentação prévia de certidão de patente deferida pelo INPI.",
+       "As empresas enquadradas como startups ficam impedidas de optar pelo regime do Simples Nacional."],
+      2,
+      "Gabarito: C. Ponto crucial da LC 182/2021: o investidor-anjo aporta capital sem virar sócio operacional e não responde com seu patrimônio pessoal pelas dívidas da empresa."],
+    ["(SEBRAE/Cebraspe) No âmbito da modelagem de modelos de negócios pelo Business Model Canvas, o bloco 'Canais' compreende:",
+      ["Exclusivamente as rodovias e linhas de transporte utilizadas pela transportadora terceirizada.",
+       "Os pontos de contato e meios pelos quais a empresa comunica e entrega sua proposta de valor aos segmentos de clientes.",
+       "O cálculo percentual da margem de contribuição líquida dos produtos.",
+       "A estrutura de custos fixos e variáveis exigida para fabricação do protótipo.",
+       "As métricas financeiras de retorno do investimento sobre patrimônio líquido."],
+      1,
+      "Gabarito: B. Canais tratam da interface com o cliente: comunicação, distribuição, venda e suporte pós-venda."]
+  ],
+  "projetos": [
+    ["(SEBRAE/Cebraspe) De acordo com o Guia PMBOK, a Estrutura Analítica do Projeto (EAP / WBS) é o instrumento responsável por:",
+      ["Calcular o fluxo de caixa descontado e o retorno sobre o investimento líquido.",
+       "Decompor hierarquicamente o escopo total do trabalho em entregas menores e gerenciáveis.",
+       "Estabelecer sanções disciplinares para atrasos de tarefas operacionais.",
+       "Substituir o termo de abertura e o contrato de prestação de serviços.",
+       "Definir os salários nominais de todos os consultores envolvidos."],
+      1,
+      "Gabarito: B. A EAP organiza e decompõe o escopo total do projeto em entregas palpáveis."],
+    ["(SEBRAE/Cebraspe) No framework ágil Scrum, a reunião diária (Daily Scrum) tem por finalidade:",
+      ["Julgar desempenhos individuais e aplicar advertências por atraso.",
+       "Inspecionar o progresso rumo à Meta da Sprint e sincronizar o plano de trabalho para as próximas 24 horas.",
+       "Apresentar demonstrações do produto diretamente aos patrocinadores executivos.",
+       "Revisar o contrato jurídico e reajustar o orçamento financeiro.",
+       "Substituir o Product Backlog por relatórios de auditoria externa."],
+      1,
+      "Gabarito: B. A Daily é uma sincronização de 15 minutos entre o time de desenvolvimento para identificar impedimentos e manter o alinhamento."]
+  ],
+  "pessoas": [
+    ["(SEBRAE/Cebraspe) No modelo de Gestão por Competências adotado no Sistema SEBRAE, a competência é tradicionalmente expressa pelo acrônimo CHA, que sintetiza:",
+      ["Comunicação, Hierarquia e Autoridade.",
+       "Conhecimento (saber), Habilidade (saber fazer) e Atitude (querer fazer).",
+       "Compromisso, Humanismo e Adaptabilidade técnica.",
+       "Conduta, Honestidade e Assiduidade funcional.",
+       "Cultura, Habilitação e Assertividade gerencial."],
+      1,
+      "Gabarito: B. O CHA engloba Conhecimento, Habilidade e Atitude. Sem atitude, o conhecimento permanece estático."],
+    ["(SEBRAE/Cebraspe) A Avaliação de Desempenho em 360 Graus (ou Circular) caracteriza-se por:",
+      ["Limitar o feedback exclusivamente ao parecer do gestor imediato.",
+       "Coletar percepções sobre o colaborador a partir de superiores, subordinados, pares de trabalho, clientes e da autoavaliação.",
+       "Avaliar o profissional ao longo de 360 dias contínuos em auditoria secreta.",
+       "Eliminar parâmetros comportamentais e focar apenas no cumprimento da jornada em ponto eletrônico.",
+       "Ser aplicada exclusivamente a diretores estatutários."],
+      1,
+      "Gabarito: B. A avaliação 360° integra múltiplos pontos de vista ao redor do profissional, gerando um mapa abrangente de competências."]
+  ],
+  "aquisicoes": [
+    ["(SEBRAE/Cebraspe) Por se tratar de Serviço Social Autônomo (Sistema S), o SEBRAE realiza suas contratações sob o regime de:",
+      ["Aplicação obrigatória e estrita da Lei Geral de Licitações da Administração Direta.",
+       "Regulamento Próprio de Licitações e Contratos, respeitando princípios constitucionais fundamentais como legalidade, impessoalidade e moralidade.",
+       "Contratação direta livre sem necessidade de termo de referência ou pesquisa de mercado.",
+       "Normas internacionais de comércio exterior do setor privado.",
+       "Supervisão direta das assembleias legislativas estaduais."],
+      1,
+      "Gabarito: B. Entendimento consolidado do TCU e STF: entidades do Sistema S possuem regulamentos próprios de licitações."],
+    ["(SEBRAE/Cebraspe) Em processos de compras corporativas, o Termo de Referência (TR) é o documento formal que reúne:",
+      ["Apenas a indicação da marca preferida pelo departamento solicitante.",
+       "A especificação detalhada do objeto, a justificativa da contratação, os critérios de aceitabilidade e as obrigações das partes.",
+       "O comprovante de quitação do IPTU dos fornecedores convidados.",
+       "A renúncia formal de fiscalização e de penalidades contratuais.",
+       "O extrato de investimento dos fundos de reserva da entidade."],
+      1,
+      "Gabarito: B. O TR é o documento-base que delimita o que será contratado, como será medido e quais os padrões de entrega aceitos."]
+  ],
+  "financeiro": [
+    ["(SEBRAE/Cebraspe) O procedimento que consiste no confronto regular entre os registros contábeis da empresa e os extratos das contas bancárias é denominado:",
+      ["Depreciação Acelerada de Bens Imobilizados.",
+       "Conciliação Bancária / Financeira.",
+       "Amortização Extraordinária de Passivo Circulante.",
+       "Provisão para Créditos de Liquidação Duvidosa de Longo Prazo.",
+       "Equilíbrio de Balanço por Deságio Acionário."],
+      1,
+      "Gabarito: B. A conciliação bancária averigua se os lançamentos internos refletem com precisão o saldo real existente nas contas."],
+    ["(SEBRAE/Cebraspe) A Necessidade de Capital de Giro (NCG) de um negócio decorre essencialmente de:",
+      ["Aquisições de edifícios e terrenos para expansão futura.",
+       "Descompasso temporal entre o pagamento a fornecedores e o recebimento de vendas dos clientes.",
+       "Flutuações nas cotações de moedas estrangeiras no mercado futuro.",
+       "Excesso de reservas de lucros retidos no patrimônio líquido.",
+       "Isenções fiscais concedidas a cooperativas rurais."],
+      1,
+      "Gabarito: B. A NCG é o montante líquido necessário para bancar a operação entre o momento em que o dinheiro sai para pagar insumos e o momento em que retorna das vendas."]
+  ],
+  "sistemas": [
+    ["(SEBRAE/Cebraspe) Na engenharia de software corporativo, um 'Requisito Não Funcional' estabelece:",
+      ["A regra de cálculo da contribuição previdenciária patronal.",
+       "Atributos de qualidade e restrições técnicas, como tempo de resposta, escalabilidade, segurança e disponibilidade.",
+       "O catálogo de nomes de usuários com acesso às telas secundárias.",
+       "A política comercial de descontos para pagamentos à vista.",
+       "O layout gráfico das mensagens de boas-vindas do sistema."],
+      1,
+      "Gabarito: B. Requisitos funcionais definem O QUE o sistema faz; os não funcionais determinam COMO o sistema se comporta (segurança, velocidade, disponibilidade)."],
+    ["(SEBRAE/Cebraspe) Em arquiteturas de microsserviços integradas por APIs RESTful, o método HTTP semanticamente correto para substituição/atualização integral de um recurso é:",
+      ["GET.",
+       "POST.",
+       "PUT.",
+       "DELETE.",
+       "HEAD."],
+      2,
+      "Gabarito: C. O método PUT é idempotente e projetado para a atualização completa do recurso existente no servidor."]
+  ],
+  "infra": [
+    ["(SEBRAE/Cebraspe) O 'Princípio do Menor Privilégio' em segurança da informação orienta que:",
+      ["Todos os operadores devem possuir credenciais de superusuário para acelerar o fluxo de trabalho.",
+       "Cada usuário, processo ou programa deve receber estritamente o nível mínimo de acesso necessário para desempenhar suas funções legítimas.",
+       "Senhas de acesso a servidores devem ser públicas na intranet da organização.",
+       "O tráfego de rede corporativo não deve ser filtrado por firewalls.",
+       "Backups devem ser executados apenas após a ocorrência de incidentes críticos."],
+      1,
+      "Gabarito: B. Conceder apenas os acessos estritamente necessários reduz a superfície de vulnerabilidade e os impactos de incidentes."],
+    ["(SEBRAE/Cebraspe) A consagrada regra 3-2-1 para proteção e redundância de backups preconiza:",
+      ["3 cópias dos dados, em 2 mídias distintas, com pelo menos 1 cópia armazenada fora do ambiente físico principal (off-site ou nuvem).",
+       "3 tentativas diárias de login, em 2 dispositivos, por 1 operador certificado.",
+       "3 servidores físicos espelhados no mesmo rack elétrico com 1 disjuntor compartilhado.",
+       "Backup quinzenal com 3 discos e retenção por 1 semana.",
+       "Armazenamento de 3 senhas mestras por 2 diretores em 1 arquivo compartilhado."],
+      0,
+      "Gabarito: A. A regra 3-2-1 é a diretriz clássica contra desastres físicos e ataques de ransomware."]
+  ],
+  "dados": [
+    ["(SEBRAE/Cebraspe) No contexto de Business Intelligence e Engenharia de Dados, o pipeline denominado ETL compreende as etapas de:",
+      ["Exclusão, Teste e Leitura de relatórios.",
+       "Extração, Transformação e Carga (Load) dos dados.",
+       "Encapsulamento, Triagem e Licenciamento estatístico.",
+       "Exportação, Tradução e Limpeza de metadados legados.",
+       "Estatística Descritiva, Treinamento e Logística reversa."],
+      1,
+      "Gabarito: B. Extract, Transform, Load (ETL): extrai fontes heterogêneas, padroniza as regras e carrega a base analítica."],
+    ["(SEBRAE/Cebraspe) A modelagem dimensional em esquema estrela (Star Schema) diferencia-se por apresentar:",
+      ["Uma tabela fato central conectada diretamente a tabelas dimensões desnormalizadas.",
+       "Tabelas de dimensões estritamente normalizadas na 3ª Forma Normal com múltiplos níveis hierárquicos.",
+       "Estrutura em árvore binária desbalanceada para consultas transacionais ACID.",
+       "Eliminação completa de chaves primárias e estrangeiras.",
+       "Armazenamento exclusivo de dados não estruturados em arquivos JSON."],
+      0,
+      "Gabarito: A. O Star Schema usa uma tabela fato central cercada por dimensões desnormalizadas para agilizar consultas analíticas."]
+  ],
+  "marketing": [
+    ["(SEBRAE/Cebraspe) No marketing digital e vendas, a métrica CAC (Custo de Aquisição de Clientes) é calculada por meio da:",
+      ["Soma de curtidas e compartilhamentos dividida pelo faturamento do mês.",
+       "Divisão dos investimentos totais em marketing e vendas pelo número de novos clientes efetivamente adquiridos.",
+       "Subtração do faturamento bruto pela despesa tributária do exercício.",
+       "Multiplicação do ticket médio pelo número de seguidores orgânicos.",
+       "Relação entre visualizações de anúncios e volume de mensagens recebidas."],
+      1,
+      "Gabarito: B. CAC = Investimentos totais em marketing e vendas dividido pelo número de clientes conquistados no período."],
+    ["(SEBRAE/Cebraspe) A construção de Personas em estratégias de atração e engajamento difere da definição genérica de público-alvo porque:",
+      ["Trabalha exclusivamente com médias estatísticas de idade e renda sem recortes psicológicos.",
+       "Representa um perfil semi-fictício humanizado do cliente ideal, incorporando rotinas, desafios, dores e motivações reais.",
+       "É aplicável unicamente a indústrias pesadas do setor automobilístico.",
+       "Elimina a necessidade de pesquisas de mercado, pautando-se em suposições dos analistas.",
+       "Restringe-se a compradores corporativos de soluções de alto valor agregado."],
+      1,
+      "Gabarito: B. A Persona traz rosto, comportamento e dores reais, permitindo desenhar soluções alinhadas à realidade do cliente."]
+  ],
+  "comunicacao": [
+    ["(SEBRAE/Cebraspe) Em gestão de crises institucionais de comunicação, a postura técnica recomendada ao porta-voz da organização consiste em:",
+      ["Adotar silêncio absoluto até que os questionamentos cessem espontaneamente nas redes.",
+       "Prestar informações pautadas em fatos apurados, com transparência, rapidez e canais abertos de atualização, evitando especulações.",
+       "Remover publicações que contenham críticas e restringir o acesso público aos canais da ouvidoria.",
+       "Atribuir responsabilidade formal a colaboradores operacionais antes de qualquer apuração interna.",
+       "Encaminhar notificações jurídicas a veículos de imprensa que noticiem o ocorrido."],
+      1,
+      "Gabarito: B. Postura transparente, rápida e fundamentada em dados apurados resguarda a reputação e a integridade institucional."],
+    ["(SEBRAE/Cebraspe) O fluxo de comunicação organizacional classificado como 'Descendente' caracteriza-se por:",
+      ["Troca de mensagens exclusivamente entre colegas de trabalho do mesmo patamar hierárquico.",
+       "Diretrizes, metas, valores e políticas estratégicas transmitidas pela alta administração em direção às equipes da base operacional.",
+       "Manifestações espontâneas de clientes externos encaminhadas aos setores de ouvidoria.",
+       "Boatos e conversas informais veiculados sem autorização corporativa.",
+       "Reivindicações sindicais enviadas para apreciação da diretoria executiva."],
+      1,
+      "Gabarito: B. Comunicação descendente parte do topo da gestão e desce para alinhar a organização em torno dos seus objetivos."]
+  ],
+  "planejamento": [
+    ["(SEBRAE/Cebraspe) No Balanced Scorecard (BSC), o acompanhamento do plano estratégico desdobra-se em quatro perspectivas equilibradas:",
+      ["Financeira, Clientes, Processos Internos e Aprendizado/Crescimento.",
+       "Tributária, Contábil, Administrativa e Operacional.",
+       "Curto Prazo, Médio Prazo, Longo Prazo e Contingência.",
+       "Comercial, Sindical, Logística e Patrimonial.",
+       "Legal, Trabalhista, Governamental e Econômica."],
+      0,
+      "Gabarito: A. Finanças, Clientes, Processos Internos e Aprendizado/Crescimento constituem os quatro eixos conceituais do BSC."],
+    ["(SEBRAE/Cebraspe) Na análise de cenários pela Matriz SWOT (FOFA), Forças e Fraquezas correspondem a fatores do:",
+      ["Ambiente externo, enquanto Oportunidades e Ameaças derivam da organização interna.",
+       "Ambiente interno da organização, enquanto Oportunidades e Ameaças são originadas pelo ambiente externo.",
+       "Mercado financeiro, enquanto Fraquezas são restrições climáticas regionais.",
+       "Cenário fiscal municipal, enquanto Ameaças dizem respeito apenas ao clima de trabalho.",
+       "Comportamento de concorrentes estrangeiros sem controle gerencial."],
+      1,
+      "Gabarito: B. Forças e Fraquezas são variáveis controláveis do ambiente interno; Oportunidades e Ameaças vêm do ambiente externo."]
+  ],
+  "politicas": [
+    ["(SEBRAE/Cebraspe) No âmbito do desenvolvimento econômico regional e sustentabilidade, o conceito de Arranjo Produtivo Local (APL) é definido por:",
+      ["Aglomeração de empresas de uma mesma especialização produtiva em um determinado território, articuladas com governos, universidades e instituições de apoio.",
+       "Monopólio instituído por uma grande corporação sobre fornecedores de insumos da região.",
+       "Feira temporária de comércio sem ligação com as cadeias produtivas do município.",
+       "Consórcio de servidores públicos voltado exclusivamente à fiscalização sanitária.",
+       "Empresa pública criada para tabelar preços de gêneros de primeira necessidade."],
+      0,
+      "Gabarito: A. APLs congregam produtores do mesmo setor em um território definido, gerando sinergia e cooperação mútua."],
+    ["(SEBRAE/Cebraspe) As 'Salas do Empreendedor' instituídas em parceria com municípios exercem a atribuição estratégica de:",
+      ["Aplicar autos de infração e cobrar tributos de empresas informais.",
+       "Centralizar, simplificar e desburocratizar serviços de abertura, crédito, capacitação e acesso às compras públicas locais para micro e pequenas empresas.",
+       "Atender exclusivamente a indústrias multinacionais com faturamento de grande porte.",
+       "Substituir os cartórios de registro de imóveis nos distritos rurais.",
+       "Distribuir recursos a fundo perdido sem prestação de contas cadastral."],
+      1,
+      "Gabarito: B. A Sala do Empreendedor é a porta de entrada para simplificar e apoiar a formalização dos pequenos negócios municipais."]
+  ]
+};
+
+const essayThemes = [
+  {
+    title: "O papel do SEBRAE e das políticas públicas territoriais na inclusão produtiva e na transição justa para a economia sustentável (ESG)",
+    points: "Padrão de resposta da banca: 1) Diagnóstico dos pequenos negócios frente às novas exigências ambientais e de governança; 2) Dificuldades de crédito e assistência técnica aos empreendedores periféricos e rurais; 3) Propostas de articulação entre o SEBRAE, prefeituras e Salas do Empreendedor."
+  },
+  {
+    title: "A desburocratização e o tratamento favorecido às MPEs nas compras públicas como indutores do desenvolvimento local",
+    points: "Padrão de resposta da banca: 1) A aplicação prática da Lei Complementar nº 123/2006 e seus mecanismos (empate ficto e exclusividade até R$ 80 mil); 2) Impacto econômico da circulação dos recursos do orçamento municipal no próprio município; 3) O papel do analista do SEBRAE na capacitação de compradores públicos e fornecedores locais."
+  },
+  {
+    title: "Transformação digital e Inteligência Artificial nas MPEs: oportunidades, barreiras de letramento e o papel da consultoria",
+    points: "Padrão de resposta da banca: 1) O abismo de produtividade entre grandes empresas e negócios tradicionais; 2) Riscos de segurança da informação e conformidade com a LGPD; 3) Soluções e programas aplicados pelo ecossistema de inovação do SEBRAE para capacitação contínua."
+  },
+  {
+    title: "O fortalecimento do empreendedorismo feminino como estratégia de dinamização socioeconômica e redução das desigualdades",
+    points: "Padrão de resposta da banca: 1) Desafios estruturais: sobrecarga do trabalho de cuidado e assimetria de crédito financeiro; 2) Efeito multiplicador na educação e nutrição familiar; 3) Iniciativas de fomento e redes de apoio mantidas pelas instituições de fomento."
+  }
+];
+
+document.addEventListener('DOMContentLoaded', function() {
+  const EMBEDDED_KEY = "AQ.Ab8RN6IpNhbwCyUg5B4ya_1BDKtvjtYrNrYuPUKQxPmXkuMchA";
+
+  let currentList = [];
+  let currentIndex = 0;
+  let userAnswers = [];
+
+  const screenHome = document.getElementById('screenHome');
+  const screenQuiz = document.getElementById('screenQuiz');
+  const screenResult = document.getElementById('screenResult');
+  const selectRole = document.getElementById('selectRole');
+  const btnStart = document.getElementById('btnStart');
+
+  const btnTopic = document.getElementById('btnTopic');
+  const topicDisplay = document.getElementById('topicDisplay');
+  const essayInput = document.getElementById('essayInput');
+  const btnGrade = document.getElementById('btnGrade');
+  const essayFeedback = document.getElementById('essayFeedback');
+
+  btnStart.addEventListener('click', function() {
+    const role = selectRole.value;
+    currentList = sebraeBank[role] || [];
+    if (!currentList.length) {
+      alert('Nenhuma questão cadastrada para este cargo.');
+      return;
+    }
+    currentIndex = 0;
+    userAnswers = [];
+    screenHome.classList.add('hidden');
+    screenResult.classList.add('hidden');
+    screenQuiz.classList.remove('hidden');
+    renderQuestion();
+  });
+
+  function renderQuestion() {
+    const q = currentList[currentIndex];
+    screenQuiz.innerHTML = `
+      <span class="tag">Questão ${currentIndex + 1} de ${currentList.length}</span>
+      <div class="progress-bar-wrapper">
+        <div class="progress-bar-fill" style="width: ${(currentIndex / currentList.length) * 100}%"></div>
+      </div>
+      <div class="question-title">${q[0]}</div>
+      <div id="optionsWrap"></div>
+    `;
+
+    const wrap = document.getElementById('optionsWrap');
+    q[1].forEach((text, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'option-btn';
+      b.innerHTML = `<b>${String.fromCharCode(65 + i)})</b> ${text}`;
+      b.addEventListener('click', () => {
+        userAnswers[currentIndex] = i;
+        currentIndex++;
+        if (currentIndex < currentList.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  function showResults() {
+    let hits = 0;
+    currentList.forEach((q, i) => {
+      if (userAnswers[i] === q[2]) hits++;
+    });
+
+    const percent = Math.round((hits / currentList.length) * 100);
+    let note = percent === 100 ? "Gabarito perfeito! Nível de preparação de topo." : (percent >= 70 ? "Pontuação competitiva! Você está no radar de aprovação." : "Revise a legislação e os comentários das questões que errou.");
+
+    screenQuiz.classList.add('hidden');
+    screenResult.classList.remove('hidden');
+    screenResult.innerHTML = `
+      <span class="tag">Resultado do Simulado</span>
+      <div class="score-circle">${hits} / ${currentList.length}</div>
+      <div style="text-align:center;font-weight:700;font-size:15px;margin-bottom:4px">${percent}% de Aproveitamento</div>
+      <p style="text-align:center;color:var(--text-muted);font-size:13px;margin:0 0 16px">${note}</p>
+      <div id="reviewContainer"></div>
+      <button id="btnRedo" type="button" style="margin-top:16px">Refazer Simulado</button>
+      <button id="btnReturn" type="button" class="secondary-btn">Escolher Outro Cargo</button>
+    `;
+
+    const rev = document.getElementById('reviewContainer');
+    currentList.forEach((q, i) => {
+      const isRight = userAnswers[i] === q[2];
+      const div = document.createElement('div');
+      div.className = 'review-item';
+      div.innerHTML = `
+        <div>
+          <span class="badge-result ${isRight ? 'badge-correct' : 'badge-wrong'}">${isRight ? 'Acertou' : 'Errou'}</span>
+          <b style="margin-left:6px;font-size:14px">Questão ${i + 1}</b>
+        </div>
+        <div style="font-size:13px;margin:6px 0"><b>Sua opção:</b> ${String.fromCharCode(65 + userAnswers[i])}) ${q[1][userAnswers[i]]}</div>
+        <div style="font-size:13px;margin:6px 0"><b>Gabarito oficial:</b> ${String.fromCharCode(65 + q[2])}) ${q[1][q[2]]}</div>
+        <div class="comment-box">${q[3]}</div>
+      `;
+      rev.appendChild(div);
+    });
+
+    document.getElementById('btnRedo').addEventListener('click', () => {
+      currentIndex = 0;
+      userAnswers = [];
+      screenResult.classList.add('hidden');
+      screenQuiz.classList.remove('hidden');
+      renderQuestion();
+    });
+
+    document.getElementById('btnReturn').addEventListener('click', () => {
+      screenResult.classList.add('hidden');
+      screenHome.classList.remove('hidden');
+    });
+  }
+
+  btnTopic.addEventListener('click', function() {
+    const item = essayThemes[Math.floor(Math.random() * essayThemes.length)];
+    topicDisplay.innerHTML = `"${item.title}"<br><span style="font-size:12px;font-weight:400;color:var(--text-muted);display:block;margin-top:4px">${item.points}</span>`;
+    essayFeedback.innerHTML = '';
+  });
+
+  btnGrade.addEventListener('click', async function() {
+    const text = essayInput.value.trim();
+
+    if (text.length < 50) {
+      essayFeedback.innerHTML = '<span style="color:var(--wrong)">Escreva pelo menos 40 a 50 palavras para a banca avaliar o seu texto.</span>';
+      return;
+    }
+
+    const currentTopicText = topicDisplay.innerText;
+
+    btnGrade.disabled = true;
+    essayFeedback.innerHTML = `
+      <div class="ai-box" style="background:#eff6ff;border-color:#bfdbfe;color:#1e40af">
+        <b>Examinador Cebraspe analisando sua redação<span class="loading-dots"></span></b><br>
+        Avaliando domínio temático, estrutura dissertativa e aplicação prática.
+      </div>
+    `;
+
+    const promptText = `Você é o examinador oficial de redação da banca Cebraspe para o concurso do SEBRAE.
+Avalie a redação a seguir.
+
+TEMA DA BANCA:
+"${currentTopicText}"
+
+TEXTO DO CANDIDATO:
+"""${text}"""
+
+Dê a sua resposta formatada exatamente nesta estrutura:
+1. NOTA TOTAL: (dê uma nota de 0 a 100)
+2. CRITÉRIO 1 - DOMÍNIO TEMÁTICO E LEGISLAÇÃO (0 a 40 pts): análise breve do conteúdo do SEBRAE.
+3. CRITÉRIO 2 - ESTRUTURA E ARGUMENTAÇÃO (0 a 30 pts): análise da introdução, tese e proposta de intervenção.
+4. CRITÉRIO 3 - NORMA CULTA E GRAMÁTICA (0 a 30 pts): desvios encontrados.
+5. PONTOS FORTES:
+6. O QUE REESCREVER PARA ALCANÇAR A NOTA MÁXIMA:`;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${EMBEDDED_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }]
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error.message || 'Erro de autenticação da chave junto ao Google.');
+      }
+
+      const reply = data.candidates[0].content.parts[0].text;
+      const formattedReply = reply.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+      essayFeedback.innerHTML = `
+        <div class="ai-box">
+          <div style="font-weight:bold;font-size:15px;margin-bottom:8px">📋 Parecer da Banca Examinadora (IA):</div>
+          ${formattedReply}
+        </div>
+      `;
+    } catch (err) {
+      essayFeedback.innerHTML = `
+        <div style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:12px;border-radius:12px;margin-top:8px">
+          <b>Falha no retorno da IA:</b> ${err.message}<br>
+          <span style="font-size:12px;opacity:0.9">Verifique se o Google AI Studio ativou essa chave como chave de API de projetos (deve começar com AIzaSy...).</span>
+        </div>
+      `;
+    } finally {
+      btnGrade.disabled = false;
+    }
+  });
+});
+</script>
+</body>
+</html>
